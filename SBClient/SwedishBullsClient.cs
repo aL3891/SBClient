@@ -3,6 +3,7 @@ using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Io;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,8 +34,13 @@ namespace SBClient
             ((IHtmlElement)queryDocument.GetElementById("MainContent_btnSubmit")).DoClick();
 
             //There is no such user
-
-            var message = context.Current.Document.GetElementById("MainContent_msg");
+            var s = Stopwatch.StartNew();
+            while (s.Elapsed.TotalSeconds < 20)
+            {
+                var message = context.Current.Document.GetElementById("MainContent_msg");
+                Console.WriteLine(message?.TextContent);
+                await Task.Delay(1000);
+            }
         }
 
         public async Task<SBSnapshot> GetSnapshot(string ticker)
